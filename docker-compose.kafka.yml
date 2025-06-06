@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
@@ -6,6 +6,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - "2181:2181"
+    networks:
+      - iot_kafka_network
 
   kafka:
     image: confluentinc/cp-kafka:7.2.1
@@ -21,30 +23,27 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     healthcheck:
       test: ["CMD-SHELL", "ps aux | grep -q '[k]afka.Kafka'"]
-      interval: 15s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 5
-      start_period: 60s
+    networks:
+      - iot_kafka_network
 
   producer:
     build:
       context: .
-      dockerfile: Dockerfile
-    depends_on:
-      kafka:
-        condition: service_healthy
-    command: ["python", "producer/iot_producer.py"]
-
-  spark:
-    image: bitnami/spark:3.4.1
-    container_name: spark
-    ports:
-      - "4040:4040"
+      dockerfile: Dockerfile.producer
     volumes:
-      - ./spark:/app
-      - ./delta:/tmp/delta
+      - ./producer:/app
     working_dir: /app
-    command: ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,io.delta:delta-core_2.12:2.4.0", "app.py"]
+    command: ["python", "iot_producer.py"]
     depends_on:
       kafka:
         condition: service_healthy
+    networks:
+      - iot_kafka_network
+
+networks:
+  iot_kafka_network:
+    external: true
+      

@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  spark:
+    image: bitnami/spark:3.4.1
+    container_name: spark
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./spark:/app
+      - ./delta:/tmp/delta
+    working_dir: /app
+    command: ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,io.delta:delta-core_2.12:2.4.0", "app.py"]
+    networks:
+      - iot_kafka_network
+
+networks:
+  iot_kafka_network:
+    external: true

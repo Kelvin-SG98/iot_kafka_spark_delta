@@ -1,0 +1,43 @@
+# Ambientes virtuais
+venv/
+nova_venv/
+.env/
+.venv/
+
+# Cache e artefatos Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dados persistentes locais
+*.db
+*.sqlite
+*.log
+*.csv
+*.parquet
+*.delta
+
+# Arquivos de configuração pessoais
+*.env
+*.DS_Store
+*.idea/
+*.vscode/
+
+# Spark e Delta Lake temporários
+/tmp/
+*/_delta_log/
+delta/
+
+# Arquivos gerados pelo Docker
+*.pid
+*.sock
+
+# Diretórios de output ou builds
+build/
+dist/
+*.egg-info/
