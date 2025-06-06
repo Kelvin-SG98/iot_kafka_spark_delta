@@ -6,7 +6,7 @@ spark = SparkSession.builder \
     .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
     .getOrCreate()
 
-df = spark.read.format("delta").load("/app/delta/bronze")
+df = spark.read.format("delta").load("/tmp/delta/bronze/iot_sensores")
 
 print("\n📊 Exibindo os 10 últimos registros ordenados por timestamp:")
 df.orderBy("timestamp", ascending=False).show(10, truncate=False)

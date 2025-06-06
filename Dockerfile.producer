@@ -1,10 +1,5 @@
-FROM python:3.9-slim
-
+FROM python:3.9.5-slim
 WORKDIR /app
-
+COPY producer/ /app/
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-COPY iot_producer.py .
-
-CMD ["python", "iot_producer.py"]

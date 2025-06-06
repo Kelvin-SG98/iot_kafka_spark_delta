@@ -7,13 +7,13 @@ import random
 fake = Faker()
 
 producer = KafkaProducer(
-    bootstrap_servers='localhost:29092',
+    bootstrap_servers='kafka:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
 def generate_sensor_data():
     return {
-        "sensor_id": f"sensor_{random.randint(1, 5)}",
+        "sensor_id": fake.uuid4(),
         "timestamp": fake.iso8601(),
         "temperatura": round(random.uniform(20.0, 35.0), 2),
         "umidade": round(random.uniform(30.0, 90.0), 2),
@@ -24,4 +24,4 @@ while True:
     data = generate_sensor_data()
     producer.send('iot_sensores', value=data)
     print("Enviado:", data)
-    time.sleep(1)
+    time.sleep(5)
